@@ -10,7 +10,7 @@ title: About
 
 Drops:    woaiqiukui
 
-Github:   [3gstudent](https://github.com/woaiqiukui)
+Github:   [woaiqiukui]](https://github.com/woaiqiukui)
 
 ---
 
