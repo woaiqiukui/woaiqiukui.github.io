@@ -1,9 +1,9 @@
-title: 3gstudent-Blog
+title: ToLearn List
 description: "A Jekyll Blog Theme For Hackers"
 author:
-  name: "3gstudent"
+  name: "woaiqiukui"
   email: "no"
-  url: "https://3gstudent.github.io/"
+  url: "https://woaiqiukui.github.io/kui"
 
 baseurl: /
 
@@ -28,5 +28,5 @@ plugins:
   - jekyll-sitemap
 
 # Custom variables
-owner : "3gstudent"
-year : "2021"
+owner : "woaiqiukui"
+year : "2022"
