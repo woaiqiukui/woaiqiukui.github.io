@@ -1,3 +1,3 @@
-一个 To Learn List
+Published with [**Jekyll**](https://github.com/jekyll/jekyll) using [The Hacker-Blog theme](https://github.com/pages-themes/hacker)
 
-其实就是平常看到的各种文章来不及看，列个单子存下来以后慢慢学。。
+New RSS: https://3gstudent.github.io/atom.xml
