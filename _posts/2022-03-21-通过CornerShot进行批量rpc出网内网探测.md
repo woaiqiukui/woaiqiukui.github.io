@@ -36,9 +36,7 @@ category: ['RPC','红队工具','Learning']
 
 ```
 
-
-
-![image-20220321022805574](/Users/huxuhao/Library/Application Support/typora-user-images/image-20220321022805574.png)
+![Aaron Swartz](https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/Snipaste_2022-03-21_03-15-48.png)
 
 ## 实验
 
@@ -56,11 +54,11 @@ CornerShot: error: the following arguments are required: user, password, domain,
 
 简单通过dnslog试一下，会发现脚本输出的内容多而杂，即使存在出网机器也不方便辨别
 
-<img src="/Users/huxuhao/Library/Application Support/typora-user-images/image-20220321025439316.png" alt="image-20220321025439316" style="zoom:50%;" />
+![Aaron Swartz](https://github.com/woaiqiukui/BlogPic/raw/main/Snipaste_2022-03-21_03-23-11.png)
 
 简单改一下[脚本](https://github.com/woaiqiukui/cornershot/blob/master/cornershot/cornershot.py)，配合dnslog进行探测：
 
-![image-20220321025518293](/Users/huxuhao/Library/Application Support/typora-user-images/image-20220321025518293.png)
+![Aaron Swartz](https://github.com/woaiqiukui/BlogPic/raw/main/Snipaste_2022-03-21_03-24-05.png)
 
 cornershot.py文件的第94行加入：
 
@@ -71,8 +69,6 @@ if 'dnslog.cn' in target:
 
 此时去查看dnslog就可以看到来源的内网IP
 
-![image-20220321025647465](/Users/huxuhao/Library/Application Support/typora-user-images/image-20220321025647465.png)
-
-
+![Aaron Swartz](https://github.com/woaiqiukui/BlogPic/raw/main/Snipaste_2022-03-21_03-24-46.png)
 
 但是该工具本身设计初衷并不是探测出网，更多的还是内网连通状态的快速检索
