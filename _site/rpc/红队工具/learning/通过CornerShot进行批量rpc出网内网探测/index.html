@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="generator" content="Jekyll">
+
+  <title>通过CornerShot进行批量rpc出网/内网探测</title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+  <div>
+    <a href="/">
+    
+    <h1> To Learn List</h1>
+    </a>
+    <div class="header-links">
+      <a href="/archive"><h2 class="header-link">Archive</h2></a>
+<a href="/about"><h2 class="header-link">About</h2></a>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <section id="main_content">
+        <article>
+  <h2>通过CornerShot进行批量rpc出网/内网探测</h2>
+  <div class="post-categories">
+    
+    
+    <a href="/categories/#RPC">RPC</a>
+    &nbsp;
+    
+    <a href="/categories/#红队工具">红队工具</a>
+    &nbsp;
+    
+    <a href="/categories/#Learning">Learning</a>
+    
+    
+  </div>
+  <br>
+  <time datetime="2022-03-21T00:00:00+08:00" class="by-line">21 Mar 2022</time>
+  <h2 id="rpc出网探测">rpc出网探测</h2>
+
+<p>在内网环境中，通过rpc快速探测出网机器</p>
+
+<p>最初看到是<a href="https://payloads.online/archivers/2022-03-04/1/">倾旋的博客</a>https://payloads.online/archivers/2022-03-04/1/</p>
+
+<p>之后github中有了批量利用的脚本：https://github.com/syyu6/WinRpcTest</p>
+
+<p>这里尝试用最初博客中提到的cornershot来实验一下</p>
+
+<p>该工具的原理就是通过rpc来寻找内网中可以访问X机器指定端口的C机器，如果将X设置为一个公网的机器，那么就可以变向的探测出网</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-----+        +-----+          +-----+
+|     |        |     | filtered |     |
+|  A  +--------&gt;  B  +----X---&gt;(p) X  |
+|     |        |     |          |     |
++-----+        +-----+          +-(p)-+
+ source      carrier        target
+   +                               ^
+   |                               |
+   |           +-----+             |
+   |           |     |   open      |
+   +----------&gt;+  C  +-------------+
+               |     |
+               +-----+
+
+
+</code></pre></div></div>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/Snipaste_2022-03-21_03-15-48.png" alt="Aaron Swartz" /></p>
+
+<h2 id="实验">实验</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装</span>
+python3 <span class="nt">-m</span> pip <span class="nb">install </span>cornershot
+
+<span class="c"># 使用</span>
+python3 <span class="nt">-m</span> cornershot                                                            
+usage: CornerShot <span class="o">[</span><span class="nt">-h</span><span class="o">]</span> <span class="o">[</span><span class="nt">-tp</span> TPORTS] <span class="o">[</span><span class="nt">-w</span> THREADS] <span class="o">[</span><span class="nt">-v</span><span class="o">]</span> <span class="o">[</span><span class="nt">-f</span><span class="o">]</span>
+                  user password domain carrier target
+CornerShot: error: the following arguments are required: user, password, domain, carrier, target
+
+</code></pre></div></div>
+
+<p>简单通过dnslog试一下，会发现脚本输出的内容多而杂，即使存在出网机器也不方便辨别</p>
+
+<p><img src="https://github.com/woaiqiukui/BlogPic/raw/main/Snipaste_2022-03-21_03-23-11.png" alt="Aaron Swartz" /></p>
+
+<p>简单改一下<a href="https://github.com/woaiqiukui/cornershot/blob/master/cornershot/cornershot.py">脚本</a>，配合dnslog进行探测：</p>
+
+<p><img src="https://github.com/woaiqiukui/BlogPic/raw/main/Snipaste_2022-03-21_03-24-05.png" alt="Aaron Swartz" /></p>
+
+<p>cornershot.py文件的第94行加入：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="s">'dnslog.cn'</span> <span class="ow">in</span> <span class="n">target</span><span class="p">:</span>
+		<span class="n">target</span> <span class="o">=</span> <span class="n">destination</span> <span class="o">+</span> <span class="s">'.'</span> <span class="o">+</span> <span class="n">target</span>
+</code></pre></div></div>
+
+<p>此时去查看dnslog就可以看到来源的内网IP</p>
+
+<p><img src="https://github.com/woaiqiukui/BlogPic/raw/main/Snipaste_2022-03-21_03-24-46.png" alt="Aaron Swartz" /></p>
+
+<p>但是该工具本身设计初衷并不是探测出网，更多的还是内网连通状态的快速检索</p>
+
+</article>
+      </section>
+    </div>
+  </div>
+
+   
+
+
+  
+</body>
+
+</html>

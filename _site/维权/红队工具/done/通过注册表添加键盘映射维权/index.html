@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="generator" content="Jekyll">
+
+  <title>通过注册表添加键盘映射维权</title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+  <div>
+    <a href="/">
+    
+    <h1> To Learn List</h1>
+    </a>
+    <div class="header-links">
+      <a href="/archive"><h2 class="header-link">Archive</h2></a>
+<a href="/about"><h2 class="header-link">About</h2></a>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <section id="main_content">
+        <article>
+  <h2>通过注册表添加键盘映射维权</h2>
+  <div class="post-categories">
+    
+    
+    <a href="/categories/#维权">维权</a>
+    &nbsp;
+    
+    <a href="/categories/#红队工具">红队工具</a>
+    &nbsp;
+    
+    <a href="/categories/#Done">Done</a>
+    
+    
+  </div>
+  <br>
+  <time datetime="2022-03-22T00:00:00+08:00" class="by-line">22 Mar 2022</time>
+  <h2 id="项目介绍">项目介绍</h2>
+
+<p>先放上项目地址</p>
+
+<p>https://github.com/NtQuerySystemInformation/CustomKeyboardLayoutPersistence</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If you want to compile your own keyboard driver:
+	1.-Compile the keyboard driver and the dropper (KeyboardLayoutPersistence) as Release x64.
+	2.-Replace the keyboard driver dll inside KeyboardLayoutPersistence folder. 
+	3.-Execute the dropper and then reboot. 
+
+If you just want to compile and test (precompiled dll)
+	1.-Compile the dropper as Release x64 (KeyboardLayoutPersistence).
+	2.-Execute and then reboot.
+</code></pre></div></div>
+
+<p>Release x64编译，需要将cpp语言标准选为最新</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322140659388.png" alt="image-20220322140659388" /></p>
+
+<p>编译成功后运行64位程序，关机重启，会弹出一个system权限的cmd，可以作为开机自启动的维权手段</p>
+
+<h2 id="项目原理">项目原理</h2>
+
+<p>看下源码，可以发现是在配置键盘映射的注册表中新增了一个项</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322141004269.png" alt="image-20220322141004269" /></p>
+
+<p>在Keyboard Layouts的最后新增了一项，并将恶意的KBDPAYLOAD.dll进行加载</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322141054197.png" alt="image-20220322141054197" /></p>
+
+<p>对比看下这是简体中文对应的项</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322141552546.png" alt="image-20220322141552546" /></p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322143552297.png" alt="image-20220322143552297" /></p>
+
+<p>其中input.dll为键盘的默认布局，<code class="language-plaintext highlighter-rouge">@%SystemRoot%\system32\input.dll,-5000</code>是系统获取键盘布局的项，可以看到默认的系统键盘布局为US，也就是美国英文键盘。</p>
+
+<p>那么也就不难理解，其实该项目也就是做了dll的劫持，在系统获取键盘布局时加载了恶意的KBDPAYLOAD.dll。原项目dll是做了弹出cmd，我们可以生成任意免杀的dll做劫持即可</p>
+
+<p>比如做一个弹出计算机的x64的dll</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span>
+<span class="cp">#include "pch.h"
+</span>
+<span class="n">DWORD</span> <span class="n">WINAPI</span> <span class="nf">exec</span><span class="p">(</span><span class="n">LPVOID</span> <span class="n">IpParameter</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">WinExec</span><span class="p">(</span><span class="s">"calc.exe"</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="n">BOOL</span> <span class="n">APIENTRY</span> <span class="nf">DllMain</span><span class="p">(</span> <span class="n">HMODULE</span> <span class="n">hModule</span><span class="p">,</span>
+                       <span class="n">DWORD</span>  <span class="n">ul_reason_for_call</span><span class="p">,</span>
+                       <span class="n">LPVOID</span> <span class="n">lpReserved</span>
+                     <span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">HANDLE</span> <span class="n">hThread</span><span class="p">;</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">ul_reason_for_call</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="k">case</span> <span class="n">DLL_PROCESS_ATTACH</span><span class="p">:</span>
+			<span class="n">hThread</span> <span class="o">=</span> <span class="n">CreateThread</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">exec</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+			<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">DLL_THREAD_ATTACH</span><span class="p">:</span>
+    <span class="k">case</span> <span class="n">DLL_THREAD_DETACH</span><span class="p">:</span>
+    <span class="k">case</span> <span class="n">DLL_PROCESS_DETACH</span><span class="p">:</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
+
+<p>此处生成的dll为calc.dll，所以要将项目中的引用进行修改</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322162841788.png" alt="image-20220322162841788" /></p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322162857741.png" alt="image-20220322162857741" /></p>
+
+<p>将dll放到KeyboardLayoutPersistence文件夹下，运行exe</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322162654956.png" alt="image-20220322162654956" /></p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322162755030.png" alt="image-20220322162755030" style="zoom:50%;" /></p>
+
+<p>然后重启机器</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220322162312678.png" alt="image-20220322162312678" /></p>
+
+<h2 id="总结">总结</h2>
+
+<p>可以看作键盘布局的dll劫持</p>
+
+<p>但是修改注册表的行为和dll还需要做进一步免杀</p>
+
+
+</article>
+      </section>
+    </div>
+  </div>
+
+   
+
+
+  
+</body>
+
+</html>
