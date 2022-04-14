@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="generator" content="Jekyll">
+
+  <title>一次钓鱼复盘</title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+  <div>
+    <a href="/">
+    
+    <h1> To Learn List</h1>
+    </a>
+    <div class="header-links">
+      <a href="/archive"><h2 class="header-link">Archive</h2></a>
+<a href="/about"><h2 class="header-link">About</h2></a>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <section id="main_content">
+        <article>
+  <h2>一次钓鱼复盘</h2>
+  <div class="post-categories">
+    
+    
+    <a href="/categories/#钓鱼">钓鱼</a>
+    &nbsp;
+    
+    <a href="/categories/#Done">Done</a>
+    
+    
+  </div>
+  <br>
+  <time datetime="2022-04-15T00:00:00+08:00" class="by-line">15 Apr 2022</time>
+  <p>[TOC]</p>
+
+<h2 id="钓鱼基建准备">钓鱼基建准备</h2>
+
+<h4 id="域名准备">域名准备</h4>
+
+<p>针对钓鱼的目标，找到一个近似域名进行注册，多数情况钓鱼对象为com域名，需要上godaddy等域名提供商去购买，freedom等免费域名难以提供com域名</p>
+
+<p>另外需要注意，购买.cn域名时需要在国内进行实名认证</p>
+
+<h4 id="vps">vps</h4>
+
+<p>需要准备一台支持开放25等邮件端口的vps，国内的话比较困难，项目中使用的是justhost的服务器，支持开放25端口</p>
+
+<p>另外在购买后，需要查询分配的IP是否已被标记为垃圾邮箱地址，如已被标记还需进行IP更换</p>
+
+<p>如果为了方便也可以直接购买godaddy等厂商的邮件服务，可以自动进行dns的解析，并直接使用他们的邮服进行发信</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414104222143.png" alt="image-20220414104222143" /></p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414134801043.png" alt="image-20220414134801043" /></p>
+
+<p>邮服搭建完成后，需要通过https://www.mail-tester.com/对邮箱发信质量进行评估</p>
+
+<p>这里用godaddy的服务默认可以到达7分，基本可以正常钓鱼</p>
+
+<h4 id="钓鱼页面">钓鱼页面</h4>
+
+<p>此次项目中针对的钓鱼目标为阿里企业邮箱，对exe、zip格式的附件有很强的过滤，所以采用了钓鱼页面欺骗账号密码的方式进行钓鱼</p>
+
+<p>阿里企业邮箱对客户存在高度的定制，不同用户会有不同的logo，不同的背景、页面结构等，所以需要根据不同目标进行钓鱼页面的构造</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414224336987.png" alt="image-20220414224336987" /></p>
+
+<p>重点在于企业邮箱的登录模版为动态生成，需要自己重写</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414224533451.png" alt="image-20220414224533451" /></p>
+
+<p>配合后续采用的钓鱼服务，采用特定的标签进行编写，比如本次用到的gophish，需要在用户名处添加<code class="language-plaintext highlighter-rouge">name="username"</code>，密码处添加<code class="language-plaintext highlighter-rouge">name="password"</code>，并将整个登录处理为表单</p>
+
+<h2 id="话术准备">话术准备</h2>
+
+<p>项目不同话术不同，这次针对阿里企业邮采用的话术为异地登录检查，采用的模版为阿里企业邮箱真是的告警模版</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414225037229.png" alt="image-20220414225037229" /></p>
+
+<h2 id="邮箱接口">邮箱接口</h2>
+
+<p>钓鱼中邮箱的查找非常重要，针对性的找到运维、研发等部门的对象邮箱，可以极大提高钓鱼深入的成功率</p>
+
+<p>这里列举用到的邮箱查找接口</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>• https://www.email-format.com/i/search/
+• https://intelx.io/
+• http://www.skymem.info/
+• https://hunter.io/
+• http://www.veryvp.com
+• https://anymailfinder.com/
+• https://www.findemails.com/
+• snov.io
+</code></pre></div></div>
+
+<p>另外再通过theharvester、emailall等工具过一遍就差不多了</p>
+
+<p>theharvester需要在<code class="language-plaintext highlighter-rouge">theharvester/4.0.0/libexec/api-keys.yaml</code>中配置API-key</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414225854601.png" alt="image-20220414225854601" /></p>
+
+<p>共获取到500多个邮箱</p>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414230100229.png" alt="image-20220414230100229" /></p>
+
+<h2 id="邮箱存活验证">邮箱存活验证</h2>
+
+<p><code class="language-plaintext highlighter-rouge">无效邮件发送会导致ISP，也就是你的域名在该服务器上信誉度下降，导致发送效果变差，当大量发送失败服务器就会对此做出评，看你是否是在群发邮件，你就有可能接被服务商拉入黑名单，用户根本就接收不到你的邮件 —— 摘自知乎</code></p>
+
+<p>邮箱存活探测的原理就是通过和邮件服务器进行通信，通过回显判断邮箱是否存在</p>
+
+<ul>
+  <li>
+    <p>首先查找MX记录</p>
+
+    <p>比如阿里的企业邮箱的发信服务器</p>
+
+    <p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414231435613.png" alt="image-20220414231435613" /></p>
+  </li>
+  <li>
+    <p>然后和发信服务器进行通信</p>
+
+    <p><code class="language-plaintext highlighter-rouge">telnet mx2.qiye.aliyun.com 25</code></p>
+
+    <p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414231541339.png" alt="image-20220414231541339" /></p>
+  </li>
+  <li>
+    <p>然后发送<code class="language-plaintext highlighter-rouge">HELO</code>及<code class="language-plaintext highlighter-rouge">MAIL FROM</code></p>
+  </li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220414234854326.png" alt="image-20220414234854326" /></p>
+
+<p>​</p>
+
+<ul>
+  <li>
+    <p>发送<code class="language-plaintext highlighter-rouge">RCPT TO:&lt;111@11.com.11&gt;</code>来探测邮箱是否存在，当返回值为250时表明邮箱存在，根据该特点进行自动化利用</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">host</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">([</span><span class="s">'mx1.qiye.aliyun.com'</span><span class="p">,</span><span class="s">'mx2.qiye.aliyun.com'</span><span class="p">,</span><span class="s">'mx3.qiye.aliyun.com'</span><span class="p">])</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">'正在连接服务器...:%s'</span> <span class="o">%</span> <span class="n">host</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">smtplib</span><span class="p">.</span><span class="n">SMTP</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">helo</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">docmd</span><span class="p">(</span><span class="s">'HELO chacuo.net'</span><span class="p">)</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="n">helo</span><span class="p">)</span>
+<span class="n">send_from</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">docmd</span><span class="p">(</span><span class="s">'MAIL FROM:&lt;3121113@chacuo.net&gt;'</span><span class="p">)</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="n">send_from</span><span class="p">)</span>
+          
+<span class="n">send_from</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">docmd</span><span class="p">(</span><span class="s">'RCPT TO:&lt;%s&gt;'</span> <span class="o">%</span> <span class="n">need_verify</span><span class="p">)</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="n">send_from</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">send_from</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">250</span> <span class="ow">or</span> <span class="n">send_from</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">451</span><span class="p">:</span>
+    <span class="n">final_res</span><span class="p">[</span><span class="n">need_verify</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 存在
+</span>    <span class="n">verify_file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">need_verify</span><span class="o">+</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>在通过脚本进行探测的时候需要注意，当发送频次过高的话会被对方邮服封禁IP，且发送过快的话自己购买的第三方发信服务也会告警，所以需要注意延时验证，这里在针对阿里邮服时采用3秒延时比较合适</p>
+
+<h2 id="自动发信监控">自动发信+监控</h2>
+
+<p>采用了gophish进行钓鱼网页的搭建及自动发信的管控，没什么特别的点</p>
+
+<p>https://github.com/gophish/gophish照着手册或者网上的博客搭一下</p>
+
+
+</article>
+      </section>
+    </div>
+  </div>
+
+   
+
+
+  
+</body>
+
+</html>

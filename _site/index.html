@@ -30,81 +30,70 @@
         <ul>
     
       <li>
-          <h2><a href="/learning/522/">522</a></h2>
-          <time datetime="2023-08-25">2023-08-25</time>
-          <p>https://t.zsxq.com/6AuRrVB]
+          <h2><a href="/%E9%92%93%E9%B1%BC/done/%E4%B8%80%E6%AC%A1%E9%92%93%E9%B1%BC%E5%A4%8D%E7%9B%98/">一次钓鱼复盘</a></h2>
+          <time datetime="2022-04-15">2022-04-15</time>
+          <p>[TOC] 钓鱼基建准备 域名准备 针对钓鱼的目标，找到一个近似域名进行注册，多数情况钓鱼对象为com域名，需要上godaddy等域名提供商去购买，freedom等免费域名难以提供com域名 另外需要注意，购买.cn域名时需要在国内进行实名认证 vps 需要准备一台支持开放25等邮件端口的vps，国内的话比较困难，项目中使用的是justhost的服务器，支持开放25端口 另外在购买后，需要查询分配的IP是否已被标记为垃圾邮箱地址，如已被标记还需进行IP更换 如果为了方便也可以直接购买godaddy等厂商的邮件服务，可以自动进行dns的解析，并直接使用他们的邮服进行发信 邮服搭建完成后，需要通过https://www.mail-tester.com/对邮箱发信质量进行评估 这里用godaddy的服务默认可以到达7分，基本可以正常钓鱼 钓鱼页面 此次项目中针对的钓鱼目标为阿里企业邮箱，对exe、zip格式的附件有很强的过滤，所以采用了钓鱼页面欺骗账号密码的方式进行钓鱼 阿里企业邮箱对客户存在高度的定制，不同用户会有不同的logo，不同的背景、页面结构等，所以需要根据不同目标进行钓鱼页面的构造 重点在于企业邮箱的登录模版为动态生成，需要自己重写 配合后续采用的钓鱼服务，采用特定的标签进行编写，比如本次用到的gophish，需要在用户名处添加name="username"，密码处添加name="password"，并将整个登录处理为表单 话术准备 项目不同话术不同，这次针对阿里企业邮采用的话术为异地登录检查，采用的模版为阿里企业邮箱真是的告警模版 邮箱接口 钓鱼中邮箱的查找非常重要，针对性的找到运维、研发等部门的对象邮箱，可以极大提高钓鱼深入的成功率 这里列举用到的邮箱查找接口 • https://www.email-format.com/i/search/ • https://intelx.io/ • http://www.skymem.info/ • https://hunter.io/ • http://www.veryvp.com • https://anymailfinder.com/ • https://www.findemails.com/ • snov.io 另外再通过theharvester、emailall等工具过一遍就差不多了 theharvester需要在theharvester/4.0.0/libexec/api-keys.yaml中配置API-key 共获取到500多个邮箱 邮箱存活验证 无效邮件发送会导致ISP，也就是你的域名在该服务器上信誉度下降，导致发送效果变差，当大量发送失败服务器就会对此做出评，看你是否是在群发邮件，你就有可能接被服务商拉入黑名单，用户根本就接收不到你的邮件 —— 摘自知乎 邮箱存活探测的原理就是通过和邮件服务器进行通信，通过回显判断邮箱是否存在 首先查找MX记录 比如阿里的企业邮箱的发信服务器 然后和发信服务器进行通信 telnet mx2.qiye.aliyun.com...</p>
+      </li>
+    
+      <li>
+          <h2><a href="/lsadump/done/dump-lsa%E8%81%9A%E5%90%88/">dump lsa聚合</a></h2>
+          <time datetime="2022-04-10">2022-04-10</time>
+          <p>解密lsass内存 # mimikatz sekurlsa::Minidump lsassdump.dmp sekurlsa::logonPasswords full wce导出hash # 仅支持Windows XP，2003，Vista，7、2008和Windows 8 wce.exe -o file.txt wec.exe Procdump # 管理员cmd procdump -accepteula -ma lsass.exe lsass_dump procdump -accepteula -ma 720 lsass.dmp comsvcs.dll # powershell运行 C:\Windows\System32\rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump (Get-Process lsass).id $env:TEMP\lsass.dmp full # 清理 Remove-Item $env:TEMP\lsass.dmp -ErrorAction Ignore dumpert # exe Outflank-Dumpert.exe #...</p>
+      </li>
+    
+      <li>
+          <h2><a href="/%E7%BB%B4%E6%9D%83/%E7%BA%A2%E9%98%9F%E5%B7%A5%E5%85%B7/done/%E9%80%9A%E8%BF%87%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%B7%BB%E5%8A%A0%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84%E7%BB%B4%E6%9D%83/">通过注册表添加键盘映射维权</a></h2>
+          <time datetime="2022-03-22">2022-03-22</time>
+          <p>项目介绍 先放上项目地址 https://github.com/NtQuerySystemInformation/CustomKeyboardLayoutPersistence If you want to compile your own keyboard driver: 1.-Compile the keyboard driver and the dropper (KeyboardLayoutPersistence) as Release x64. 2.-Replace the keyboard driver dll inside KeyboardLayoutPersistence folder. 3.-Execute the dropper and then reboot. If you just want to compile and test (precompiled dll) 1.-Compile the dropper...</p>
+      </li>
+    
+      <li>
+          <h2><a href="/%E4%BA%91%E5%8E%9F%E7%94%9F/aws/learning/%E9%92%88%E5%AF%B9AWS%E7%9A%84%E5%88%A9%E7%94%A8/">针对AWS的利用</a></h2>
+          <time datetime="2022-03-21">2022-03-21</time>
+          <p>开个坑先
+https://puming.zone/post/2021-1-25-%E9%92%88%E5%AF%B9aws-lambda%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E6%94%BB%E5%87%BB/
+</p>
+      </li>
+    
+      <li>
+          <h2><a href="/rpc/%E7%BA%A2%E9%98%9F%E5%B7%A5%E5%85%B7/learning/%E9%80%9A%E8%BF%87CornerShot%E8%BF%9B%E8%A1%8C%E6%89%B9%E9%87%8Frpc%E5%87%BA%E7%BD%91%E5%86%85%E7%BD%91%E6%8E%A2%E6%B5%8B/">通过CornerShot进行批量rpc出网/内网探测</a></h2>
+          <time datetime="2022-03-21">2022-03-21</time>
+          <p>rpc出网探测 在内网环境中，通过rpc快速探测出网机器 最初看到是倾旋的博客https://payloads.online/archivers/2022-03-04/1/ 之后github中有了批量利用的脚本：https://github.com/syyu6/WinRpcTest 这里尝试用最初博客中提到的cornershot来实验一下 该工具的原理就是通过rpc来寻找内网中可以访问X机器指定端口的C机器，如果将X设置为一个公网的机器，那么就可以变向的探测出网 +-----+ +-----+ +-----+ | | | | filtered | | | A +--------&gt; B +----X---&gt;(p) X | | | | | | | +-----+ +-----+ +-(p)-+ source carrier target + ^ | | | +-----+ | | | | open | +----------&gt;+ C +-------------+...</p>
+      </li>
+    
+      <li>
+          <h2><a href="/%E4%BA%91%E5%8E%9F%E7%94%9F/azure/learning/%E5%88%A9%E7%94%A8-Azure-API-%E6%9D%83%E9%99%90%E8%8E%B7%E5%8F%96-Azure-%E9%9B%86%E7%BE%A4%E6%9D%83%E9%99%90/">利用 Azure API 权限获取 Azure 集群权限</a></h2>
+          <time datetime="2022-03-21">2022-03-21</time>
+          <p>利用 Azure API 权限获取 Azure 集群权限
+
+先放一下
+
+http://mp.weixin.qq.com/s?__biz=MzI0MDY1MDU4MQ==&amp;mid=2247537546&amp;idx=3&amp;sn=54a4e18ec500d37261579ab20c771d4e&amp;chksm=e91583b0de620aa633e7dbc147c169e9f6e7b9ca33e87fd3c4a9fe903c8cfd7c02d710929b11&amp;mpshare=1&amp;scene=1&amp;srcid=0310XA6g0OQLL9YuXbbbdK1u&amp;sharer_sharetime=1646890810197&amp;sharer_shareid=d94307a8605fb2fbec271a8d8c5a0a86#rd]
 
 </p>
       </li>
     
       <li>
-          <h2><a href="/learning/520/">520</a></h2>
-          <time datetime="2023-08-23">2023-08-23</time>
-          <p>https://t.zsxq.com/e6yNrzN]
+          <h2><a href="/%E4%BA%91%E5%8E%9F%E7%94%9F/aws/done/awscli-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%8E%A5%E5%8F%A3/">awscli 常用命令接口</a></h2>
+          <time datetime="2022-03-21">2022-03-21</time>
+          <p>云原生-awscli 常用命令接口
 
+这是个很大的门类，这个链接是awscli的官发手册
+https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html
+
+具体针对aws的渗透后续参考 https://puming.zone/post/2021-1-25-%E9%92%88%E5%AF%B9aws-lambda%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E6%94%BB%E5%87%BB/ 继续学习
+
+开个坑：_posts/2022-03-21-针对AWS的利用.md
 </p>
       </li>
     
       <li>
-          <h2><a href="/learning/519/">519</a></h2>
-          <time datetime="2023-08-22">2023-08-22</time>
-          <p>https://t.zsxq.com/NvbQvJE]
+          <h2><a href="/bof/learning/RunOF%E7%9A%84%E4%BD%BF%E7%94%A8/">RunOF的使用</a></h2>
+          <time datetime="2022-03-21">2022-03-21</time>
+          <p>RunOF的使用
+bof也是一大块东西，慢慢来
 
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/518/">518</a></h2>
-          <time datetime="2023-08-21">2023-08-21</time>
-          <p>https://t.zsxq.com/VZr7EUZ]
-
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/517/">517</a></h2>
-          <time datetime="2023-08-20">2023-08-20</time>
-          <p>https://t.zsxq.com/ZNniaiy]
-
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/516/">516</a></h2>
-          <time datetime="2023-08-19">2023-08-19</time>
-          <p>https://t.zsxq.com/iq3Fmqv]
-
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/515/">515</a></h2>
-          <time datetime="2023-08-18">2023-08-18</time>
-          <p>https://t.zsxq.com/V3FQZjE]
-
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/514/">514</a></h2>
-          <time datetime="2023-08-17">2023-08-17</time>
-          <p>https://t.zsxq.com/R7MBe2r]
-
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/513/">513</a></h2>
-          <time datetime="2023-08-16">2023-08-16</time>
-          <p>http://mp.weixin.qq.com/s?__biz=MzAwMjQ2NTQ4Mg==&amp;mid=2247488730&amp;idx=2&amp;sn=592e58fb91d7149d468cd6324914b31f&amp;chksm=9acb5f7fadbcd669b2983ba5182df8ca9445fd6ff9a038b50b3796c1a65d7aa6217ce673e78c&amp;mpshare=1&amp;scene=1&amp;srcid=0303If8ieyZ6YvkjNXX4s0YX&amp;sharer_sharetime=1646278944020&amp;sharer_shareid=d94307a8605fb2fbec271a8d8c5a0a86#rd]
-
-</p>
-      </li>
-    
-      <li>
-          <h2><a href="/learning/512/">512</a></h2>
-          <time datetime="2023-08-15">2023-08-15</time>
-          <p>https://www.semperis.com/blog/golden-gmsa-attack/
+http://mp.weixin.qq.com/s?__biz=MzU0MDcyMTMxOQ==&amp;mid=2247486056&amp;idx=3&amp;sn=c0ae04570734333cee64ef406d26f59c&amp;chksm=fb35a3a0cc422ab6d817112d097f8ce14d81384d3f9771d1725d475ce51d3964670d915a6df6&amp;mpshare=1&amp;scene=1&amp;srcid=0315qPrGzzXyQo9dBmQgV92h&amp;sharer_sharetime=1647348384615&amp;sharer_shareid=d94307a8605fb2fbec271a8d8c5a0a86#rd]
 
 </p>
       </li>
@@ -115,120 +104,6 @@
     </div>
   </div>
 
-  
-  <div class="pagination">
-    
-    <span class="page-item">&laquo;</span>
-      
-    <span class="page-item">1</span>
-      
-    <a href="/page/2/" class="page-item">2</a>
-      
-    <a href="/page/3/" class="page-item">3</a>
-      
-    <a href="/page/4/" class="page-item">4</a>
-      
-    <a href="/page/5/" class="page-item">5</a>
-      
-    <a href="/page/6/" class="page-item">6</a>
-      
-    <a href="/page/7/" class="page-item">7</a>
-      
-    <a href="/page/8/" class="page-item">8</a>
-      
-    <a href="/page/9/" class="page-item">9</a>
-      
-    <a href="/page/10/" class="page-item">10</a>
-      
-    <a href="/page/11/" class="page-item">11</a>
-      
-    <a href="/page/12/" class="page-item">12</a>
-      
-    <a href="/page/13/" class="page-item">13</a>
-      
-    <a href="/page/14/" class="page-item">14</a>
-      
-    <a href="/page/15/" class="page-item">15</a>
-      
-    <a href="/page/16/" class="page-item">16</a>
-      
-    <a href="/page/17/" class="page-item">17</a>
-      
-    <a href="/page/18/" class="page-item">18</a>
-      
-    <a href="/page/19/" class="page-item">19</a>
-      
-    <a href="/page/20/" class="page-item">20</a>
-      
-    <a href="/page/21/" class="page-item">21</a>
-      
-    <a href="/page/22/" class="page-item">22</a>
-      
-    <a href="/page/23/" class="page-item">23</a>
-      
-    <a href="/page/24/" class="page-item">24</a>
-      
-    <a href="/page/25/" class="page-item">25</a>
-      
-    <a href="/page/26/" class="page-item">26</a>
-      
-    <a href="/page/27/" class="page-item">27</a>
-      
-    <a href="/page/28/" class="page-item">28</a>
-      
-    <a href="/page/29/" class="page-item">29</a>
-      
-    <a href="/page/30/" class="page-item">30</a>
-      
-    <a href="/page/31/" class="page-item">31</a>
-      
-    <a href="/page/32/" class="page-item">32</a>
-      
-    <a href="/page/33/" class="page-item">33</a>
-      
-    <a href="/page/34/" class="page-item">34</a>
-      
-    <a href="/page/35/" class="page-item">35</a>
-      
-    <a href="/page/36/" class="page-item">36</a>
-      
-    <a href="/page/37/" class="page-item">37</a>
-      
-    <a href="/page/38/" class="page-item">38</a>
-      
-    <a href="/page/39/" class="page-item">39</a>
-      
-    <a href="/page/40/" class="page-item">40</a>
-      
-    <a href="/page/41/" class="page-item">41</a>
-      
-    <a href="/page/42/" class="page-item">42</a>
-      
-    <a href="/page/43/" class="page-item">43</a>
-      
-    <a href="/page/44/" class="page-item">44</a>
-      
-    <a href="/page/45/" class="page-item">45</a>
-      
-    <a href="/page/46/" class="page-item">46</a>
-      
-    <a href="/page/47/" class="page-item">47</a>
-      
-    <a href="/page/48/" class="page-item">48</a>
-      
-    <a href="/page/49/" class="page-item">49</a>
-      
-    <a href="/page/50/" class="page-item">50</a>
-      
-    <a href="/page/51/" class="page-item">51</a>
-      
-    <a href="/page/52/" class="page-item">52</a>
-      
-    <a href="/page/53/" class="page-item">53</a>
-      
-    <a href="/page/2/" class="page-item">&raquo;</a>
-    
-  </div>
    
 
 
